@@ -1,6 +1,6 @@
 ## Automating the Deployment of Mivu Server on AWS using Terraform
 
-This Terraform configuration code will create a server in aws europe region in the eu-central-1a Avaliability Zone then install, run and enable the following packeges. It will also create an Elastic Public IP Address for the server.
+This Terraform configuration code will create a server in aws south africa region in the af-south-1a Avaliability Zone then install, run and enable the following packeges. It will also create an Elastic Public IP Address for the server.
 
 1. InfluxDB (version OSS - 1.8.x) + Chronograf
 2. Grafana (version OSS 9.5.3)
@@ -49,10 +49,6 @@ run this command
 5. Default output format [None]: json
 
 #### **\_\_** Running Terraform Configuration Code **\_\_\_**
-
-First clone this repo to your local machine
-
-cd Mivu-Single-Server
 
 terraform init
 
