@@ -16,10 +16,10 @@ locals {
 }
 
 #Define the VPC
-resource "aws_vpc" "MiVu_VPC" {
+resource "aws_vpc" "Main_VPC" {
   cidr_block = var.vpc_cidr
   tags = {
-    Name        = "MiVu VPC"
+    Name        = "Main VPC"
     Environment = "Test ENV"
     Terraform   = "True"
     Region      = data.aws_region.current.name
@@ -28,7 +28,7 @@ resource "aws_vpc" "MiVu_VPC" {
 
 #Deploy the private subnets
 resource "aws_subnet" "private_subnet" {
-  vpc_id            = aws_vpc.MiVu_VPC.id
+  vpc_id            = aws_vpc.Main_VPC.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = data.aws_availability_zone.available.name
   tags = {
@@ -39,16 +39,16 @@ resource "aws_subnet" "private_subnet" {
 
 #Create Internet Gateway
 resource "aws_internet_gateway" "internet_gateway" {
-  vpc_id = aws_vpc.MiVu_VPC.id
+  vpc_id = aws_vpc.Main_VPC.id
   tags = {
-    Name      = "MiVu IGW"
+    Name      = "Main IGW"
     Terraform = "True"
   }
 }
 
 #Create route tables for public and private subnets 
 resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.MiVu_VPC.id
+  vpc_id = aws_vpc.Main_VPC.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.internet_gateway.id
@@ -87,7 +87,7 @@ resource "aws_key_pair" "generated" {
 # Security Groups
 resource "aws_security_group" "ingress-ssh" {
   name   = "Main SG"
-  vpc_id = aws_vpc.MiVu_VPC.id
+  vpc_id = aws_vpc.Main_VPC.id
   ingress {
     description = "SSH"
     cidr_blocks = [
@@ -167,7 +167,7 @@ resource "aws_security_group" "ingress-ssh" {
 }
 
 resource "aws_network_acl" "network_acl" {
-  vpc_id = aws_vpc.MiVu_VPC.id
+  vpc_id = aws_vpc.Main_VPC.id
 
   ingress {
     protocol   = "-1"
@@ -324,8 +324,8 @@ resource "aws_network_acl_association" "main_acl" {
   subnet_id      = aws_subnet.private_subnet.id
 }
 
-resource "aws_instance" "mivu_server" {
-  ami                         = "ami-0b0c5a84b89c4bf99"
+resource "aws_instance" "main_server" {
+  ami                         = "ami-01c9be62c98bb9ccf"
   instance_type               = "t2.micro"
   subnet_id                   = aws_subnet.private_subnet.id
   security_groups             = [aws_security_group.ingress-ssh.id]
@@ -379,7 +379,7 @@ resource "aws_instance" "mivu_server" {
   }
 
   tags = {
-    Name      = "Mivu Server ${local.team}"
+    Name      = "Main Server ${local.team}"
     Terraform = "True"
   }
   lifecycle {
@@ -387,10 +387,10 @@ resource "aws_instance" "mivu_server" {
   }
 }
 resource "aws_eip" "server_eip" {
-  instance = aws_instance.mivu_server.id
+  instance = aws_instance.main_server.id
   #vpc      = true
   tags = {
-    Name = "Mivu Server EIP"
+    Name = "Main Server EIP"
     Terraform = "True"
   }
 }
