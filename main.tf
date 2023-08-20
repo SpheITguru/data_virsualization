@@ -326,7 +326,7 @@ resource "aws_network_acl_association" "main_acl" {
 
 resource "aws_instance" "main_server" {
   ami                         = "ami-01c9be62c98bb9ccf"
-  instance_type               = "t2.micro"
+  instance_type               = "t3.micro"
   subnet_id                   = aws_subnet.private_subnet.id
   security_groups             = [aws_security_group.ingress-ssh.id]
   associate_public_ip_address = true
