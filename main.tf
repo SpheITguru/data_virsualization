@@ -1,10 +1,10 @@
 # Our Cloud Provider Will be AWS
 provider "aws" {
-  region = "eu-central-1"
+  region = "af-south-1"
 }
 
 data "aws_availability_zone" "available" {
-  name = "eu-central-1a"
+  name = "af-south-1a"
 }
 
 data "aws_region" "current" {}
